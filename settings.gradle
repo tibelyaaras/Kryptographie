@@ -1,4 +1,5 @@
 rootProject.name = 'Kryptographie'
 include 'report'
 include 'blockchain'
+include 'console'
 

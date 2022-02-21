@@ -11,6 +11,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/blockchain" />
+            <option value="$PROJECT_DIR$/console" />
             <option value="$PROJECT_DIR$/report" />
           </set>
         </option>
