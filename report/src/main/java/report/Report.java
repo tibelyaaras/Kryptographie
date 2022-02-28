@@ -145,4 +145,14 @@ public class Report implements IReport{
         }
         return bFile;
     }
+
+
+
+    public double getRansomAmount() {
+        return ransomAmount;
+    }
+
+    public void setRansomAmount(double ransomAmount) {
+        this.ransomAmount = ransomAmount;
+    }
 }

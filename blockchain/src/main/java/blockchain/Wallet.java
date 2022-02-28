@@ -1,3 +1,7 @@
+package blockchain;
+
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
 import java.security.*;
 import java.security.spec.ECGenParameterSpec;
 import java.util.ArrayList;
@@ -15,6 +19,7 @@ public class Wallet {
 
     public void generateKeyPair() {
         try {
+            Security.addProvider(new BouncyCastleProvider());
             KeyPairGenerator keyGen = KeyPairGenerator.getInstance("ECDSA", "BC");
             SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
             ECGenParameterSpec ecSpec = new ECGenParameterSpec("prime192v1");

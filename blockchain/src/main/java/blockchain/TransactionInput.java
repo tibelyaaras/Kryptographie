@@ -1,3 +1,5 @@
+package blockchain;
+
 public class TransactionInput {
     private final String id;
     private TransactionOutput utx0;
