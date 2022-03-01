@@ -49,7 +49,9 @@ public class Network {
 
     public void buyBitcoin(Wallet reciverWallet,double amount){
         Transaction bitcoinSend=this.satoshiNakamoto.sendFunds(reciverWallet.getPublicKey(),amount);
-        previousBlock.addTransaction(bitcoinSend);
+        Block nBlock=new Block(this.previousBlock.getHash());
+        nBlock.addTransaction(bitcoinSend);
+        this.addBlock(nBlock);
     }
 
     private void addBlock(Block block){
