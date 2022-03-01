@@ -2,6 +2,10 @@ package blockchain;
 import com.google.gson.GsonBuilder;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -132,14 +136,30 @@ public class Network {
 
     public void buyBitcoin(Wallet reciverWallet,double amount){
         Transaction bitcoinSend=this.satoshiNakamoto.sendFunds(reciverWallet.getPublicKey(),amount);
+        addTransaction(bitcoinSend);
+    }
+
+    public void addTransaction(Transaction bitcoinSend){
         Block nBlock=new Block(this.previousBlock.getHash());
         nBlock.addTransaction(bitcoinSend);
         this.addBlock(nBlock);
     }
 
     private void addBlock(Block block){
+        Miner m = miners.get(ThreadLocalRandom.current().nextInt(miners.size()) % miners.size());
+        block.mineBlock(Configuration.instance.difficulty, m);
         this.blockchain.add(block);
         this.previousBlock = block;
+
+        try {
+            File f = Path.of("blockchain.json").toAbsolutePath().toFile();
+            f.createNewFile();
+            FileWriter fw = new FileWriter(f);
+            new GsonBuilder().setPrettyPrinting().create().toJson(this, fw);
+            fw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static Network getInstance() {
