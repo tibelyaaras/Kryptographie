@@ -8,4 +8,8 @@ public class Miner {
         this.name=name;
         this.wallet=new Wallet();
     }
+
+    public Wallet getWallet() {
+        return wallet;
+    }
 }

@@ -1,5 +1,6 @@
 package blockchain;
 
+import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
@@ -11,6 +12,8 @@ public class Block {
     private String merkleRoot;
     private String hash;
     private int nonce;
+    private PublicKey minerKey;
+    private double reward;
 
     public Block(String previousHash) {
         this.previousHash = previousHash;
@@ -31,11 +34,14 @@ public class Block {
     }
 
     public String calculateHash() {
-        return StringUtility.applySha256(previousHash + timeStamp + nonce + merkleRoot);
+        return StringUtility.applySha256(previousHash + timeStamp + StringUtility.getStringFromKey(minerKey) + merkleRoot);
     }
 
-    //bearbeitet
     public void mineBlock(int difficulty, Miner miner) {
+        this.minerKey = miner.getWallet().getPublicKey();
+        this.reward = Configuration.instance.reward;
+
+        TransactionOutput minerReward = new TransactionOutput(miner.getWallet().getPublicKey(), reward, "BlockReward-" + merkleRoot + "-" + previousHash);
         merkleRoot = StringUtility.getMerkleRoot(transactions);
         String target = StringUtility.getDifficultyString(difficulty);
 
@@ -44,6 +50,7 @@ public class Block {
             hash = calculateHash();
         }
 
+        Network.getInstance().getUtx0Map().put(minerReward.getID(), minerReward);
         System.out.println("block mined | " + hash);
     }
 
