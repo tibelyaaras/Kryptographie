@@ -127,7 +127,7 @@ public class Console {
 
     private void payBTC(double amount, String recipient) {
         if (recipient.equals(StringUtility.getStringFromKey(report.getWallet().getPublicKey()))) {
-            wallet.sendFunds((PublicKey) StringUtility.getKeyFromString(recipient), amount);
+            Network.getInstance().addTransaction(wallet.sendFunds((PublicKey) StringUtility.getKeyFromString(recipient), amount));
         }
     }
 

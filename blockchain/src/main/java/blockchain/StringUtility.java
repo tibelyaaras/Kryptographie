@@ -65,6 +65,7 @@ public class StringUtility {
 
     //bearbeitet
     public static String getStringFromKey(Key key) {
+        if (key == null) return "";
         return Base64.getEncoder().encodeToString(key.getEncoded());
     }
 
