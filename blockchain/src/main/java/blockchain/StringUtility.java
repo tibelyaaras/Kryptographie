@@ -7,7 +7,13 @@ import java.util.ArrayList;
 import java.util.Base64;
 
 public class StringUtility {
-    //bearbeitet
+
+    public static final String ANSI_BLUE = "\u001B[34m";
+    public static final String ANSI_RESET = "\u001B[0m";
+
+    public static String blueOutput(String s) {
+        return ANSI_BLUE + s + ANSI_RESET;
+    }
 
     public static String applySha256(String input) {
         try {
