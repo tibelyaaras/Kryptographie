@@ -36,12 +36,10 @@ public class Network {
                         this.genesisTransaction.getId()
                         )
         );
-
         this.utx0Map.put(
                 this.genesisTransaction.getOutputs().get(0).getID(),
                 this.genesisTransaction.getOutputs().get(0)
         );
-
         Block genesisBlock = new Block("0");
         genesisBlock.addTransaction(this.genesisTransaction);
         addBlock(genesisBlock);
@@ -68,8 +66,12 @@ public class Network {
         return this.utx0Map;
     }
 
-    public int getTransactionSequence(){return transactionSequence;}
+    public int getTransactionSequence(){
+        return transactionSequence;
+    }
 
-    public void incrementTransactionSequence(){transactionSequence++;}
+    public void incrementTransactionSequence(){
+        transactionSequence++;
+    }
 
 }

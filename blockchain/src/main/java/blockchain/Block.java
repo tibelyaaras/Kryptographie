@@ -35,7 +35,7 @@ public class Block {
     }
 
     //bearbeitet
-    public void mineBlock(int difficulty) {
+    public void mineBlock(int difficulty, Miner miner) {
         merkleRoot = StringUtility.getMerkleRoot(transactions);
         String target = StringUtility.getDifficultyString(difficulty);
 

@@ -2,6 +2,7 @@ package blockchain;
 
 import java.nio.charset.StandardCharsets;
 import java.security.*;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
 import java.util.Base64;
 
@@ -61,7 +62,18 @@ public class StringUtility {
         return Base64.getEncoder().encodeToString(key.getEncoded());
     }
 
-    //getkeyfromstring
+    public static Key getKeyFromString(String string){
+        try {
+            byte[] byteKey = Base64.getDecoder().decode(string.getBytes());
+            X509EncodedKeySpec X509publicKey = new X509EncodedKeySpec(byteKey);
+            KeyFactory kf = KeyFactory.getInstance("ECDSA", "BC");
+
+            return kf.generatePublic(X509publicKey);
+        }
+        catch(Exception e){
+        }
+        return null;
+    }
 
     public static String getMerkleRoot(ArrayList<Transaction> transactions) {
         int count = transactions.size();
