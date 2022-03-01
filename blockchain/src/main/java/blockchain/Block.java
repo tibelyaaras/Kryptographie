@@ -34,6 +34,7 @@ public class Block {
         return StringUtility.applySha256(previousHash + timeStamp + nonce + merkleRoot);
     }
 
+    //bearbeitet
     public void mineBlock(int difficulty) {
         merkleRoot = StringUtility.getMerkleRoot(transactions);
         String target = StringUtility.getDifficultyString(difficulty);

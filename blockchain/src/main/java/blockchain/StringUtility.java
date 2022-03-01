@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Base64;
 
 public class StringUtility {
+    //bearbeitet
+
     public static String applySha256(String input) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
@@ -54,9 +56,12 @@ public class StringUtility {
         }
     }
 
+    //bearbeitet
     public static String getStringFromKey(Key key) {
         return Base64.getEncoder().encodeToString(key.getEncoded());
     }
+
+    //getkeyfromstring
 
     public static String getMerkleRoot(ArrayList<Transaction> transactions) {
         int count = transactions.size();

@@ -34,10 +34,11 @@ public class Wallet {
         }
     }
 
-    public float getBalance() {
-        float total = 0;
+    //bearbeitet
+    public double getBalance() {
+        double total = 0;
 
-        for (Map.Entry<String, TransactionOutput> item : Configuration.instance.utx0Map.entrySet()) {
+        for (Map.Entry<String, TransactionOutput> item : Network.getInstance().getUtx0Map().entrySet()) {
             TransactionOutput utx0 = item.getValue();
             if (utx0.isMine(publicKey)) {
                 utx0Map.put(utx0.getID(), utx0);
@@ -48,7 +49,7 @@ public class Wallet {
         return total;
     }
 
-    public Transaction sendFunds(PublicKey recipient, float value) {
+    public Transaction sendFunds(PublicKey recipient, double value) {
         if (getBalance() < value) {
             System.out.println("#not enough funds to send transaction - transaction discarded");
             return null;
@@ -56,7 +57,7 @@ public class Wallet {
 
         ArrayList<TransactionInput> inputs = new ArrayList<>();
 
-        float total = 0;
+        double total = 0;
         for (Map.Entry<String, TransactionOutput> item : utx0Map.entrySet()) {
             TransactionOutput utx0 = item.getValue();
             total += utx0.getValue();

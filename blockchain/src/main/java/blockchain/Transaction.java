@@ -7,23 +7,24 @@ import java.util.ArrayList;
 public class Transaction {
     private final PublicKey sender;
     private final PublicKey recipient;
-    private final float value;
+    private final double value;
     private final ArrayList<TransactionOutput> outputs = new ArrayList<>();
     private final ArrayList<TransactionInput> inputs;
     private String id;
     private byte[] signature;
 
-    public Transaction(PublicKey from, PublicKey to, float value, ArrayList<TransactionInput> inputs) {
+    public Transaction(PublicKey from, PublicKey to, double value, ArrayList<TransactionInput> inputs) {
         this.sender = from;
         this.recipient = to;
         this.value = value;
         this.inputs = inputs;
     }
 
+    //bearbeitet
     private String calculateHash() {
-        Configuration.instance.transactionSequence++;
+        Network.getInstance().incrementTransactionSequence();
         return StringUtility.applySha256(StringUtility.getStringFromKey(sender) + StringUtility.getStringFromKey(recipient)
-                + value + Configuration.instance.transactionSequence);
+                + value + Network.getInstance().getTransactionSequence());
     }
 
     public void generateSignature(PrivateKey privateKey) {
@@ -37,6 +38,7 @@ public class Transaction {
 
     }
 
+    //bearbeitet
     public boolean processTransaction() {
         if (verifySignature()) {
             System.out.println("#transaction signature failed to verify");
@@ -44,35 +46,35 @@ public class Transaction {
         }
 
         for (TransactionInput i : inputs) {
-            i.setUtx0(Configuration.instance.utx0Map.get(i.getId()));
+            i.setUtx0(Network.getInstance().getUtx0Map().get(i.getId()));
         }
 
-        if (getInputsValue() < Configuration.instance.minimumTransaction) {
+        if (getInputsValue() <= Configuration.instance.minimumTransaction) {
             System.out.println("#transaction input to small | " + getInputsValue());
             return false;
         }
 
-        float leftOver = getInputsValue() - value;
+        double leftOver = getInputsValue() - value;
         id = calculateHash();
         outputs.add(new TransactionOutput(recipient, value, id));
         outputs.add(new TransactionOutput(sender, leftOver, id));
 
         for (TransactionOutput o : outputs) {
-            Configuration.instance.utx0Map.put(o.getID(), o);
+            Network.getInstance().getUtx0Map().put(o.getID(), o);
         }
 
         for (TransactionInput i : inputs) {
             if (i.getUTX0() == null) {
                 continue;
             }
-            Configuration.instance.utx0Map.remove(i.getUTX0().getID());
+            Network.getInstance().getUtx0Map().remove(i.getUTX0().getID());
         }
 
         return true;
     }
 
-    public float getInputsValue() {
-        float total = 0;
+    public double getInputsValue() {
+        double total = 0;
 
         for (TransactionInput i : inputs) {
             if (i.getUTX0() == null) {
@@ -84,8 +86,8 @@ public class Transaction {
         return total;
     }
 
-    public float getOutputsValue() {
-        float total = 0;
+    public double getOutputsValue() {
+        double total = 0;
 
         for (TransactionOutput o : outputs) {
             total += o.getValue();
@@ -110,7 +112,7 @@ public class Transaction {
         return recipient;
     }
 
-    public float getValue() {
+    public double getValue() {
         return value;
     }
 
