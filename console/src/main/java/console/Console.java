@@ -2,6 +2,7 @@ package console;
 
 import bank.Bank;
 import bank.BankAccount;
+import blockchain.Network;
 import blockchain.Wallet;
 import report.Report;
 
@@ -13,6 +14,9 @@ public class Console {
     // Victim
     private final BankAccount bankAccount;
     private final Wallet wallet;
+
+    // Bitcoin Transactions
+    private Network network;
 
     // Console Application
     private final ConsolePrintUtility printUtility;
@@ -29,6 +33,8 @@ public class Console {
         this.bankAccount = Bank.generateBankAccount("Clue Less", 5000);
         this.wallet = new Wallet();
 
+        // Bitcoin Transactions
+        this.network = new Network();
 
         // Console Application
         printUtility.printInitApplication();
@@ -71,7 +77,7 @@ public class Console {
                     break;
                 case "launch http://www.trust-me.mcg/report.jar":
                 case "launch":
-                    //report.startEncryption();
+                    report.startEncryption();
                     break;
                 case "exit":
                     System.out.println("We will now shut down the program.");
@@ -83,21 +89,34 @@ public class Console {
 
 
             if (input.startsWith("exchange")) {
-                double exchange = Double.parseDouble(input.split("\\s+")[1]);
+                String inpu = input.replace(",", ".");
+                String inp = inpu.replace("exchange", "");
+                String in = inp.replace("BTC", "");
 
-                double currentBalance = this.bankAccount.getBalance();
+                double exchange = Double.parseDouble(in);
 
-                double exchangeInEuro = exchange / 0.000019;
+                exchangeBTC(exchange);
 
-                if(currentBalance >= exchangeInEuro) {
-                    this.bankAccount.setBalance(currentBalance - exchangeInEuro);
-                }
 
             }
             else if (input.startsWith("pay")) {
-                double ransomAmount = report.getRansomAmount();
+                //double ransomAmount = report.getRansomAmount();
             }
         }
+    }
+
+    private void exchangeBTC(double amount) {
+        double currentBalance = this.bankAccount.getBalance();
+        double exchangeInEuro = amount / 0.000019;
+
+        if(currentBalance >= exchangeInEuro) {
+            this.bankAccount.setBalance(currentBalance - exchangeInEuro);
+        }
+
+        this.network.buyBitcoin(this.wallet, amount);
+
+        System.out.println("new bank balance:\t" + this.bankAccount.getBalance());
+        System.out.println(this.wallet.getBalance());
     }
 
 

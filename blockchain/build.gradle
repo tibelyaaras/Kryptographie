@@ -35,4 +35,6 @@ task build_jar(type: Jar) {
         from 'build/libs/blockchain.jar'
         into "jar"
     }
+
+    exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
 }
