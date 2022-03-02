@@ -12,4 +12,8 @@ public class Miner {
     public Wallet getWallet() {
         return wallet;
     }
+
+    public String getName() {
+        return name;
+    }
 }

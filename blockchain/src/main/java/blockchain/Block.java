@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
 
+import static blockchain.StringUtility.blueOutput;
+
 public class Block {
     private final String previousHash;
     private final long timeStamp;
@@ -12,8 +14,8 @@ public class Block {
     private String merkleRoot;
     private String hash;
     private int nonce;
-    private PublicKey minerKey;
-    private double reward;
+    private PublicKey miner;
+    private double minerReward;
 
     public Block(String previousHash) {
         this.previousHash = previousHash;
@@ -34,10 +36,15 @@ public class Block {
     }
 
     public String calculateHash() {
-        return StringUtility.applySha256(previousHash + timeStamp + nonce + merkleRoot);
+        return StringUtility.applySha256(previousHash + timeStamp + nonce + merkleRoot + StringUtility.getStringFromKey(miner) + minerReward);
     }
 
-    public void mineBlock(int difficulty) {
+    public void mineBlock(int difficulty, Miner m) {
+        this.miner = m.getWallet().getPublicKey();
+        this.minerReward = Configuration.instance.reward;
+
+        TransactionOutput reward = new TransactionOutput(m.getWallet().getPublicKey(), minerReward, "BlockReward-" + merkleRoot + "-" + previousHash);
+
         merkleRoot = StringUtility.getMerkleRoot(transactions);
         String target = StringUtility.getDifficultyString(difficulty);
 
@@ -46,7 +53,9 @@ public class Block {
             hash = calculateHash();
         }
 
-        System.out.println("block mined | " + hash);
+        Network.getInstance().getUtx0Map().put(reward.getID(), reward);
+
+        System.out.printf(blueOutput("new block [%s] mined by %s%n"), hash, m.getName());
     }
 
     public void addTransaction(Transaction transaction) {

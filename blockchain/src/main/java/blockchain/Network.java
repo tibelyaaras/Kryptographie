@@ -146,12 +146,12 @@ public class Network {
     }
 
     private void addBlock(Block block){
-        //Miner m = miners.get(ThreadLocalRandom.current().nextInt(miners.size()) % miners.size());
-        block.mineBlock(Configuration.instance.difficulty);
+        Miner miner = this.miners.get(ThreadLocalRandom.current().nextInt(miners.size()) % miners.size());
+        block.mineBlock(Configuration.instance.difficulty, miner);
         this.blockchain.add(block);
         this.previousBlock = block;
 
-        /*try {
+        try {
             File f = Path.of("blockchain.json").toAbsolutePath().toFile();
             f.createNewFile();
             FileWriter fw = new FileWriter(f);
@@ -159,7 +159,7 @@ public class Network {
             fw.close();
         } catch (IOException e) {
             e.printStackTrace();
-        }*/
+        }
     }
 
     public static Network getInstance() {
