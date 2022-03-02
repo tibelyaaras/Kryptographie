@@ -25,12 +25,4 @@ public class ConsolePrintUtility {
         System.out.println("- exit");
         System.out.println("-------------------------------------------------");
     }
-
-    public void printEncryption() {
-        System.out.println("Oops, your files have been encrypted. With a payment of 0.02755 BTC all files will be decrypted.");
-    }
-
-    public void printDecryption() {
-        System.out.println("Your transaction was successful and therefore your files will be decrypted!");
-    }
 }

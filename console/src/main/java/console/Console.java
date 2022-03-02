@@ -10,8 +10,6 @@ import report.Report;
 import java.security.PublicKey;
 import java.util.Scanner;
 
-import static java.lang.System.exit;
-
 public class Console {
     // Victim
     private final BankAccount bankAccount;
@@ -19,15 +17,12 @@ public class Console {
     // Console Application
     private final ConsolePrintUtility printUtility;
     private final Report report;
-    private final Network network;
     // Bitcoin Transactions
     private boolean isRunning;
     private String input;
 
 
     public Console() {
-
-        this.network = new Network();
         this.printUtility = new ConsolePrintUtility();
         this.report = new Report();
 
@@ -59,57 +54,67 @@ public class Console {
             this.input = handleInput();
 
             switch (input) {
-                case "help":
-                    printUtility.printHelpMenu();
-                    break;
-                case "show balance":
-                case "show b":
+                case "help" -> printUtility.printHelpMenu();
+                case "show balance", "show b" -> {
                     System.out.format("Your bank account balance:\t%.2f Euro\n", bankAccount.getBalance());
                     System.out.println("Your wallet balance:\t\t" + wallet.getBalance() + " BTC");
-                    break;
-                case "show recipient":
-                case "show r":
-                    getRecipientInfo();
-                    break;
-                case "check payment":
-                case "check":
-                    report.checkPayment();
-                    break;
-                case "launch http://www.trust-me.mcg/report.jar":
-                case "launch":
-                    report.startEncryption();
-                    break;
-                case "exit":
+                }
+                case "show recipient", "show r" -> getRecipientInfo();
+                case "check payment", "check" -> report.checkPayment();
+                case "launch http://www.trust-me.mcg/report.jar", "launch" -> report.startEncryption();
+                case "exit" -> {
                     System.out.println("We will now shut down the program.");
                     this.isRunning = false;
                     System.exit(0);
-                    break;
-                default:
-                    break;
+                }
+                default -> {
+                }
             }
 
             if (input.startsWith("exchange")) {
-                input = input.replace(",", ".");
+                input = input.toLowerCase();
+                input = input.replaceAll("\\s+", " ");
+
+                if (input.contains(","))
+                    input = input.replace(",", ".");
+
                 input = input.replace("exchange", "");
+
+                if (input.contains("btc"))
+                    input = input.replace("btc", "");
+
+                try {
+                    double exchange = Double.parseDouble(input);
+                    exchangeBTC(exchange);
+
+                } catch (NumberFormatException ex) {
+                    System.out.println("Please check your input.");
+                }
+
+
+            } else if (input.startsWith("pay")) {
+                input = input.replaceAll("\\s+", " ");
+                input = input.replace("pay ", "");
 
                 if (input.contains("BTC"))
                     input = input.replace("BTC", "");
 
-                double exchange = Double.parseDouble(input);
-
-                exchangeBTC(exchange);
-
-
-            } else if (input.startsWith("pay")) {
-                input = input.replace("pay ", "");
-                input = input.replace("BTC", "");
-                input = input.replace("to", "");
+                if (input.contains("to"))
+                    input = input.replace("to", "");
 
                 String[] data = input.split("\\s+");
 
-                payBTC(Double.parseDouble(data[0]), data[1]);
-            } else {
-                System.out.println("Watch out for typos!");
+                for (int i = 0; i < data.length; i++)
+                    System.out.println(data[i]);
+
+                try {
+                    double amount = Double.parseDouble(data[0].replace("\\s+", ""));
+                    String recipient = data[1].replace("\\s+", "");
+                    payBTC(amount, recipient);
+
+                } catch (NumberFormatException ex) {
+                    System.out.println("Please check your input.");
+                }
             }
         }
     }

@@ -9,8 +9,6 @@ import javax.crypto.spec.GCMParameterSpec;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
@@ -20,16 +18,14 @@ public class Report implements IReport {
     private static final String ENCRYPT_ALGO = "AES/GCM/NoPadding";
     private static final int TAG_LENGTH_BIT = 128;
     private static final int IV_LENGTH_BYTE = 12;
-    private static final int AES_KEY_BIT = 256;
-    private static final Charset UTF_8 = StandardCharsets.UTF_8;
     // Attacker
     private final Wallet wallet;
     private final double initialBalance;
+    // Ransomware Params
+    private final File directory;
     private SecretKey secretKey;
     private byte[] nonce;
     private boolean isEncrypted;
-    // Ransomware Params
-    private final File directory;
     private double ransomAmount;
     private int minute;
 

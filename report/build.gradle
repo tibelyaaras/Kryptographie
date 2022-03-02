@@ -42,7 +42,7 @@ task fatJar(type: Jar, dependsOn: [':blockchain:fatJar']) {
     }
     archiveBaseName = "report" //TODO here adjust the NAME
     from {
-        //configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+        configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
     with jar
     exclude 'META-INF/*.RSA', 'META-INF/*.SF','META-INF/*.DSA'
