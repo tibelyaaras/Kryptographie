@@ -34,14 +34,10 @@ public class Block {
     }
 
     public String calculateHash() {
-        return StringUtility.applySha256(previousHash + timeStamp + StringUtility.getStringFromKey(minerKey) + merkleRoot);
+        return StringUtility.applySha256(previousHash + timeStamp + nonce + merkleRoot);
     }
 
-    public void mineBlock(int difficulty, Miner miner) {
-        this.minerKey = miner.getWallet().getPublicKey();
-        this.reward = Configuration.instance.reward;
-
-        TransactionOutput minerReward = new TransactionOutput(miner.getWallet().getPublicKey(), reward, "BlockReward-" + merkleRoot + "-" + previousHash);
+    public void mineBlock(int difficulty) {
         merkleRoot = StringUtility.getMerkleRoot(transactions);
         String target = StringUtility.getDifficultyString(difficulty);
 
@@ -50,7 +46,6 @@ public class Block {
             hash = calculateHash();
         }
 
-        Network.getInstance().getUtx0Map().put(minerReward.getID(), minerReward);
         System.out.println("block mined | " + hash);
     }
 

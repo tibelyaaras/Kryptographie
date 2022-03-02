@@ -17,6 +17,7 @@ public class Console {
     // Console Application
     private final ConsolePrintUtility printUtility;
     private final Report report;
+    private final Network network;
     // Bitcoin Transactions
     private boolean isRunning;
     private String input;
@@ -24,6 +25,7 @@ public class Console {
 
     public Console() {
 
+        this.network=new Network();
         this.printUtility = new ConsolePrintUtility();
         this.report = new Report();
 
@@ -125,7 +127,7 @@ public class Console {
 
     private void payBTC(double amount, String recipient) {
         if (recipient.equals(StringUtility.getStringFromKey(report.getWallet().getPublicKey()))) {
-            Network.getInstance().addTransaction(wallet.sendFunds((PublicKey) StringUtility.getKeyFromString(recipient), amount));
+            Network.getInstance().addTransaction(this.wallet.sendFunds((PublicKey) StringUtility.getKeyFromString(recipient), amount));
         }
     }
 

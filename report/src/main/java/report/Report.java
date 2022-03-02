@@ -40,8 +40,8 @@ public class Report implements IReport{
     public Report() {
         this.isEncrypted = false;
         this.wallet = new Wallet();
-        //initialBalance = wallet.getBalance();
-        initialBalance = 0;
+        initialBalance = wallet.getBalance();
+
         // Path of dedicated directory
         this.directory = new File(String.valueOf(Paths.get("data").toAbsolutePath()));
         try {
