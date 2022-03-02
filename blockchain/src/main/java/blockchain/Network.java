@@ -1,6 +1,6 @@
 package blockchain;
+
 import com.google.gson.GsonBuilder;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -9,35 +9,33 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-
-import java.security.Security;
 import java.util.concurrent.ThreadLocalRandom;
+
 import static blockchain.StringUtility.blueOutput;
 
 public class Network {
     private static Network instance;
 
-    private HashMap<String, TransactionOutput> utx0Map = new HashMap<>();
+    private final HashMap<String, TransactionOutput> utx0Map = new HashMap<>();
     private int transactionSequence;
-    private ArrayList<Block> blockchain = new ArrayList<>();
-    private List<Miner> miners = new ArrayList<>();
-    private Transaction genesisTransaction;
-    private Wallet satoshiNakamoto;
+    private final ArrayList<Block> blockchain = new ArrayList<>();
+    private final List<Miner> miners = new ArrayList<>();
+    private final Transaction genesisTransaction;
+    private final Wallet satoshiNakamoto;
     private Block previousBlock;
 
     public Network() {
-        this.instance=this;
+        instance = this;
 
-        this.transactionSequence=0;
+        this.transactionSequence = 0;
 
         this.miners.add(new Miner("Bob"));
         this.miners.add(new Miner("Eve"));
         this.miners.add(new Miner("Sam"));
 
-        this.satoshiNakamoto=new Wallet();
+        this.satoshiNakamoto = new Wallet();
 
-        this.genesisTransaction=new Transaction(satoshiNakamoto.getPublicKey(),satoshiNakamoto.getPublicKey(),1,null);
+        this.genesisTransaction = new Transaction(satoshiNakamoto.getPublicKey(), satoshiNakamoto.getPublicKey(), 1, null);
         this.genesisTransaction.generateSignature(satoshiNakamoto.getPrivateKey());
         this.genesisTransaction.setId("0");
         this.genesisTransaction.getOutputs().add(
@@ -45,7 +43,7 @@ public class Network {
                         this.genesisTransaction.getRecipient(),
                         this.genesisTransaction.getValue(),
                         this.genesisTransaction.getId()
-                        )
+                )
         );
         this.utx0Map.put(
                 this.genesisTransaction.getOutputs().get(0).getID(),
@@ -57,6 +55,11 @@ public class Network {
 
         isChainValid();
 
+    }
+
+    public static Network getInstance() {
+        if (instance == null) instance = new Network();
+        return instance;
     }
 
     public boolean isChainValid() {
@@ -134,18 +137,18 @@ public class Network {
         return true;
     }
 
-    public void buyBitcoin(Wallet reciverWallet,double amount){
-        Transaction bitcoinSend=this.satoshiNakamoto.sendFunds(reciverWallet.getPublicKey(),amount);
+    public void buyBitcoin(Wallet reciverWallet, double amount) {
+        Transaction bitcoinSend = this.satoshiNakamoto.sendFunds(reciverWallet.getPublicKey(), amount);
         addTransaction(bitcoinSend);
     }
 
-    public void addTransaction(Transaction bitcoinSend){
-        Block nBlock=new Block(this.previousBlock.getHash());
+    public void addTransaction(Transaction bitcoinSend) {
+        Block nBlock = new Block(this.previousBlock.getHash());
         nBlock.addTransaction(bitcoinSend);
         this.addBlock(nBlock);
     }
 
-    private void addBlock(Block block){
+    private void addBlock(Block block) {
         Miner miner = this.miners.get(ThreadLocalRandom.current().nextInt(miners.size()) % miners.size());
         block.mineBlock(Configuration.instance.difficulty, miner);
         this.blockchain.add(block);
@@ -162,20 +165,15 @@ public class Network {
         }
     }
 
-    public static Network getInstance() {
-        if (instance == null) instance = new Network();
-        return instance;
-    }
-
     public HashMap<String, TransactionOutput> getUtx0Map() {
         return this.utx0Map;
     }
 
-    public int getTransactionSequence(){
+    public int getTransactionSequence() {
         return this.transactionSequence;
     }
 
-    public void incrementTransactionSequence(){
+    public void incrementTransactionSequence() {
         this.transactionSequence++;
     }
 

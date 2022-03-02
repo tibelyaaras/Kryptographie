@@ -25,14 +25,13 @@ public class Console {
 
     public Console() {
 
-        this.network=new Network();
+        this.network = new Network();
         this.printUtility = new ConsolePrintUtility();
         this.report = new Report();
 
         // Victim
         this.bankAccount = Bank.generateBankAccount("Clue Less", 5000);
         this.wallet = new Wallet();
-
 
 
         // Console Application
@@ -63,7 +62,7 @@ public class Console {
                     break;
                 case "show balance":
                 case "show b":
-                    System.out.println("Your bank account balance:\t" + bankAccount.getBalance() + " Euro");
+                    System.out.format("Your bank account balance:\t%.2f Euro\n", bankAccount.getBalance());
                     System.out.println("Your wallet balance:\t\t" + wallet.getBalance() + " BTC");
                     break;
                 case "show recipient":
@@ -88,27 +87,25 @@ public class Console {
 
 
             if (input.startsWith("exchange")) {
-                String inpu = input.replace(",", ".");
-                String inp = inpu.replace("exchange", "");
-                String in = inp.replace("BTC", "");
+                input = input.replace(",", ".");
+                input = input.replace("exchange", "");
 
-                double exchange = Double.parseDouble(in);
+                if (input.contains("BTC"))
+                    input = input.replace("BTC", "");
+
+                double exchange = Double.parseDouble(input);
 
                 exchangeBTC(exchange);
 
 
             } else if (input.startsWith("pay")) {
-                String inpu = input.replace("pay ", "");
-                String inp = inpu.replace("BTC", "");
-                String in = inp.replace("to", "");
+                input = input.replace("pay ", "");
+                input = input.replace("BTC", "");
+                input = input.replace("to", "");
 
-                String[] data = in.split("\\s+");
+                String[] data = input.split("\\s+");
 
-                if (Double.parseDouble(data[0]) >= report.getRansomAmount()) {
-                    if (wallet.getBalance() >= report.getRansomAmount()) {
-                        payBTC(Double.parseDouble(data[0]), data[1]);
-                    }
-                }
+                payBTC(Double.parseDouble(data[0]), data[1]);
             }
         }
     }
