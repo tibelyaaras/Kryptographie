@@ -18,13 +18,13 @@ public class Report implements IReport {
     private static final String ENCRYPT_ALGO = "AES/GCM/NoPadding";
     private static final int TAG_LENGTH_BIT = 128;
     private static final int IV_LENGTH_BYTE = 12;
-    private SecretKey secretKey;
-    private byte[] nonce;
     // Attacker
     private final Wallet wallet;
     private final double initialBalance;
     // Ransomware Params
     private final File directory;
+    private SecretKey secretKey;
+    private byte[] nonce;
     private boolean isEncrypted;
     private double amount;
     private int minute;
