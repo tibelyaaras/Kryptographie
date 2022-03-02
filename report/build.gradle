@@ -35,15 +35,3 @@ task build_jar(type: Jar) {
 
     exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
 }
-
-task fatJar(type: Jar, dependsOn: [':blockchain:fatJar']) {
-    manifest {
-        attributes 'Main-Class': "report.Application"
-    }
-    archiveBaseName = "report" //TODO here adjust the NAME
-    from {
-        configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-    }
-    with jar
-    exclude 'META-INF/*.RSA', 'META-INF/*.SF','META-INF/*.DSA'
-}
