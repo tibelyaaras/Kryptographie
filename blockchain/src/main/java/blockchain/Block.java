@@ -15,7 +15,7 @@ public class Block {
     private String hash;
     private int nonce;
     private PublicKey miner;
-    private double minerReward;
+    private double reward;
 
     public Block(String previousHash) {
         this.previousHash = previousHash;
@@ -36,14 +36,14 @@ public class Block {
     }
 
     public String calculateHash() {
-        return StringUtility.applySha256(previousHash + timeStamp + nonce + merkleRoot + StringUtility.getStringFromKey(miner) + minerReward);
+        return StringUtility.applySha256(previousHash + timeStamp + nonce + merkleRoot + StringUtility.getStringFromKey(miner) + reward);
     }
 
-    public void mineBlock(int difficulty, Miner m) {
-        this.miner = m.getWallet().getPublicKey();
-        this.minerReward = Configuration.instance.reward;
+    public void mineBlock(int difficulty, Miner miner) {
+        this.miner = miner.getWallet().getPublicKey();
+        this.reward = Configuration.instance.reward;
 
-        TransactionOutput reward = new TransactionOutput(m.getWallet().getPublicKey(), minerReward, "BlockReward-" + merkleRoot + "-" + previousHash);
+        TransactionOutput reward = new TransactionOutput(miner.getWallet().getPublicKey(), this.reward, "BlockReward-" + merkleRoot + "-" + previousHash);
 
         merkleRoot = StringUtility.getMerkleRoot(transactions);
         String target = StringUtility.getDifficultyString(difficulty);
@@ -55,7 +55,7 @@ public class Block {
 
         Network.getInstance().getUtx0Map().put(reward.getID(), reward);
 
-        System.out.printf(blueOutput("new block [%s] mined by %s%n"), hash, m.getName());
+        System.out.printf(blueOutput("new block [%s] was mined by Miner %s%n"), hash, miner.getName());
     }
 
     public void addTransaction(Transaction transaction) {
