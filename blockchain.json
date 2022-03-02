@@ -1,27 +1,59 @@
 {
   "utx0Map": {
-    "7a77f7fcdd82b54588cf381e4c2fc213f9c61d9dd8d551e8f4fc737ac4c3f609": {
-      "id": "7a77f7fcdd82b54588cf381e4c2fc213f9c61d9dd8d551e8f4fc737ac4c3f609",
+    "2afbbc72389b9636da9816b3b21b3528a3e1f4128e38829aa31ca20965726c9c": {
+      "id": "2afbbc72389b9636da9816b3b21b3528a3e1f4128e38829aa31ca20965726c9c",
+      "recipient": {
+        "algorithm": "ECDSA",
+        "withCompression": false
+      },
+      "value": 0.0024499999999999973
+    },
+    "f7ef7058501fec541a9072c4e0dbcda3cd483180c83e97b049ccfa3ac054af1c": {
+      "id": "f7ef7058501fec541a9072c4e0dbcda3cd483180c83e97b049ccfa3ac054af1c",
       "recipient": {
         "algorithm": "ECDSA",
         "withCompression": false
       },
       "value": 0.025
     },
-    "730fc8681eb19e23e17c8e192effd110b89db610476dd248930273391f8dc6cc": {
-      "id": "730fc8681eb19e23e17c8e192effd110b89db610476dd248930273391f8dc6cc",
+    "b45be7a1c61ab565a2676c2d95525ce9f33fac515797d42c094aff12d348795d": {
+      "id": "b45be7a1c61ab565a2676c2d95525ce9f33fac515797d42c094aff12d348795d",
       "recipient": {
         "algorithm": "ECDSA",
         "withCompression": false
       },
-      "value": 1.0
+      "value": 0.025
+    },
+    "8e00973ea83838f5c650713687e31ec3360848a5d1180249b46e31895410c1a5": {
+      "id": "8e00973ea83838f5c650713687e31ec3360848a5d1180249b46e31895410c1a5",
+      "recipient": {
+        "algorithm": "ECDSA",
+        "withCompression": false
+      },
+      "value": 0.02755
+    },
+    "0ce35e94341d8481ccbe41d88fc181508f871e7a55cfa7e4220ef2281bd64bc2": {
+      "id": "0ce35e94341d8481ccbe41d88fc181508f871e7a55cfa7e4220ef2281bd64bc2",
+      "recipient": {
+        "algorithm": "ECDSA",
+        "withCompression": false
+      },
+      "value": 0.97
+    },
+    "a912a6eae5ec4e812e7993794aef83a423cf2e68cfbe01607d622820a1de266b": {
+      "id": "a912a6eae5ec4e812e7993794aef83a423cf2e68cfbe01607d622820a1de266b",
+      "recipient": {
+        "algorithm": "ECDSA",
+        "withCompression": false
+      },
+      "value": 0.025
     }
   },
-  "transactionSequence": 0,
+  "transactionSequence": 2,
   "blockchain": [
     {
       "previousHash": "0",
-      "timeStamp": 1646233834796,
+      "timeStamp": 1646234761092,
       "transactions": [
         {
           "sender": {
@@ -35,7 +67,7 @@
           "value": 1.0,
           "outputs": [
             {
-              "id": "730fc8681eb19e23e17c8e192effd110b89db610476dd248930273391f8dc6cc",
+              "id": "f5b9bdf86b534a5bfe0b29496604a4492a4b0ddf88dfc5dd04a11ceeeca394de",
               "recipient": {
                 "algorithm": "ECDSA",
                 "withCompression": false
@@ -46,66 +78,293 @@
           "id": "0",
           "signature": [
             48,
-            53,
+            52,
             2,
             24,
-            83,
-            48,
-            115,
-            -102,
-            -29,
-            -53,
-            0,
-            19,
-            47,
-            -103,
-            -62,
-            -65,
-            -38,
-            -14,
+            102,
+            -104,
             -78,
-            -62,
-            13,
-            -7,
-            -6,
-            82,
-            125,
-            -125,
-            -77,
-            -119,
-            2,
-            25,
-            0,
+            124,
+            28,
+            -33,
+            -94,
+            -101,
             -93,
-            92,
-            -123,
-            119,
-            -48,
-            -82,
-            51,
-            -109,
-            97,
-            123,
-            -24,
-            96,
-            34,
-            116,
-            -49,
-            126,
-            -6,
-            31,
-            -115,
-            10,
-            -65,
-            37,
-            -70,
-            86
+            11,
+            -14,
+            -96,
+            -96,
+            -64,
+            110,
+            -80,
+            0,
+            94,
+            -26,
+            46,
+            71,
+            -108,
+            -57,
+            -80,
+            2,
+            24,
+            84,
+            -99,
+            -5,
+            29,
+            -111,
+            -19,
+            -9,
+            94,
+            -127,
+            -74,
+            -98,
+            79,
+            -105,
+            87,
+            -55,
+            81,
+            -89,
+            -61,
+            -81,
+            -100,
+            -20,
+            17,
+            -122,
+            127
           ]
         }
       ],
       "merkleRoot": "0",
-      "hash": "000609ab27c35f0c9f908bfe100fe6740eeec96fa66c4da1913b8330090dd2ca",
-      "nonce": 1150,
+      "hash": "0008e9a85e5d3807fd13073f4f0693bdb32a772cd1c64691b3faf0dfccacec71",
+      "nonce": 1031,
+      "miner": {
+        "algorithm": "ECDSA",
+        "withCompression": false
+      },
+      "minerReward": 0.025
+    },
+    {
+      "previousHash": "0008e9a85e5d3807fd13073f4f0693bdb32a772cd1c64691b3faf0dfccacec71",
+      "timeStamp": 1646234784273,
+      "transactions": [
+        {
+          "sender": {
+            "algorithm": "ECDSA",
+            "withCompression": false
+          },
+          "recipient": {
+            "algorithm": "ECDSA",
+            "withCompression": false
+          },
+          "value": 0.03,
+          "outputs": [
+            {
+              "id": "e39d6e1f8d006190a2e208281617fec2e9fc84cde9672ac272e6dd8790ad332a",
+              "recipient": {
+                "algorithm": "ECDSA",
+                "withCompression": false
+              },
+              "value": 0.03
+            },
+            {
+              "id": "0ce35e94341d8481ccbe41d88fc181508f871e7a55cfa7e4220ef2281bd64bc2",
+              "recipient": {
+                "algorithm": "ECDSA",
+                "withCompression": false
+              },
+              "value": 0.97
+            }
+          ],
+          "inputs": [
+            {
+              "id": "f5b9bdf86b534a5bfe0b29496604a4492a4b0ddf88dfc5dd04a11ceeeca394de",
+              "utx0": {
+                "id": "f5b9bdf86b534a5bfe0b29496604a4492a4b0ddf88dfc5dd04a11ceeeca394de",
+                "recipient": {
+                  "algorithm": "ECDSA",
+                  "withCompression": false
+                },
+                "value": 1.0
+              }
+            }
+          ],
+          "id": "7a0bfc7c6ead7898c0e8fd59979d471a68a45fd09916a5307202cc3648666835",
+          "signature": [
+            48,
+            53,
+            2,
+            24,
+            19,
+            -2,
+            -40,
+            -34,
+            -1,
+            39,
+            -84,
+            91,
+            -34,
+            76,
+            -19,
+            23,
+            54,
+            123,
+            77,
+            -66,
+            49,
+            71,
+            16,
+            -4,
+            -6,
+            -60,
+            70,
+            15,
+            2,
+            25,
+            0,
+            -115,
+            -24,
+            -54,
+            -23,
+            -99,
+            -107,
+            12,
+            26,
+            76,
+            82,
+            74,
+            120,
+            12,
+            73,
+            -3,
+            -57,
+            94,
+            2,
+            7,
+            77,
+            0,
+            18,
+            125,
+            -70
+          ]
+        }
+      ],
+      "merkleRoot": "7a0bfc7c6ead7898c0e8fd59979d471a68a45fd09916a5307202cc3648666835",
+      "hash": "00069be2afc63917b1d78d67ca86ad8b18cfc569bb975a0c651fa4c735935be8",
+      "nonce": 990,
+      "miner": {
+        "algorithm": "ECDSA",
+        "withCompression": false
+      },
+      "minerReward": 0.025
+    },
+    {
+      "previousHash": "00069be2afc63917b1d78d67ca86ad8b18cfc569bb975a0c651fa4c735935be8",
+      "timeStamp": 1646234808483,
+      "transactions": [
+        {
+          "sender": {
+            "algorithm": "ECDSA",
+            "withCompression": false
+          },
+          "recipient": {
+            "algorithm": "ECDSA",
+            "withCompression": false
+          },
+          "value": 0.02755,
+          "outputs": [
+            {
+              "id": "8e00973ea83838f5c650713687e31ec3360848a5d1180249b46e31895410c1a5",
+              "recipient": {
+                "algorithm": "ECDSA",
+                "withCompression": false
+              },
+              "value": 0.02755
+            },
+            {
+              "id": "2afbbc72389b9636da9816b3b21b3528a3e1f4128e38829aa31ca20965726c9c",
+              "recipient": {
+                "algorithm": "ECDSA",
+                "withCompression": false
+              },
+              "value": 0.0024499999999999973
+            }
+          ],
+          "inputs": [
+            {
+              "id": "e39d6e1f8d006190a2e208281617fec2e9fc84cde9672ac272e6dd8790ad332a",
+              "utx0": {
+                "id": "e39d6e1f8d006190a2e208281617fec2e9fc84cde9672ac272e6dd8790ad332a",
+                "recipient": {
+                  "algorithm": "ECDSA",
+                  "withCompression": false
+                },
+                "value": 0.03
+              }
+            }
+          ],
+          "id": "5f2575b0e269b6d98d9584042f5b6aaf850ec2b80f4f276843d12cff8808bb70",
+          "signature": [
+            48,
+            53,
+            2,
+            24,
+            77,
+            -42,
+            34,
+            111,
+            81,
+            -83,
+            -24,
+            113,
+            59,
+            -108,
+            -76,
+            -40,
+            -5,
+            96,
+            -91,
+            -39,
+            41,
+            -101,
+            116,
+            -93,
+            103,
+            21,
+            117,
+            -79,
+            2,
+            25,
+            0,
+            -18,
+            20,
+            -7,
+            -119,
+            -121,
+            16,
+            19,
+            119,
+            30,
+            18,
+            -82,
+            -124,
+            -37,
+            -124,
+            21,
+            -31,
+            67,
+            -27,
+            8,
+            -30,
+            56,
+            -39,
+            -42,
+            38
+          ]
+        }
+      ],
+      "merkleRoot": "5f2575b0e269b6d98d9584042f5b6aaf850ec2b80f4f276843d12cff8808bb70",
+      "hash": "0003fa2746418dff230be5495547e71218d90c2c21b67dfdcf999bbd237f6039",
+      "nonce": 201,
       "miner": {
         "algorithm": "ECDSA",
         "withCompression": false
@@ -169,7 +428,7 @@
     "value": 1.0,
     "outputs": [
       {
-        "id": "730fc8681eb19e23e17c8e192effd110b89db610476dd248930273391f8dc6cc",
+        "id": "f5b9bdf86b534a5bfe0b29496604a4492a4b0ddf88dfc5dd04a11ceeeca394de",
         "recipient": {
           "algorithm": "ECDSA",
           "withCompression": false
@@ -180,60 +439,59 @@
     "id": "0",
     "signature": [
       48,
-      53,
+      52,
       2,
       24,
-      83,
-      48,
-      115,
-      -102,
-      -29,
-      -53,
-      0,
-      19,
-      47,
-      -103,
-      -62,
-      -65,
-      -38,
-      -14,
+      102,
+      -104,
       -78,
-      -62,
-      13,
-      -7,
-      -6,
-      82,
-      125,
-      -125,
-      -77,
-      -119,
-      2,
-      25,
-      0,
+      124,
+      28,
+      -33,
+      -94,
+      -101,
       -93,
-      92,
-      -123,
-      119,
-      -48,
-      -82,
-      51,
-      -109,
-      97,
-      123,
-      -24,
-      96,
-      34,
-      116,
-      -49,
-      126,
-      -6,
-      31,
-      -115,
-      10,
-      -65,
-      37,
-      -70,
-      86
+      11,
+      -14,
+      -96,
+      -96,
+      -64,
+      110,
+      -80,
+      0,
+      94,
+      -26,
+      46,
+      71,
+      -108,
+      -57,
+      -80,
+      2,
+      24,
+      84,
+      -99,
+      -5,
+      29,
+      -111,
+      -19,
+      -9,
+      94,
+      -127,
+      -74,
+      -98,
+      79,
+      -105,
+      87,
+      -55,
+      81,
+      -89,
+      -61,
+      -81,
+      -100,
+      -20,
+      17,
+      -122,
+      127
     ]
   },
   "satoshiNakamoto": {
@@ -248,8 +506,8 @@
     }
   },
   "previousBlock": {
-    "previousHash": "0",
-    "timeStamp": 1646233834796,
+    "previousHash": "00069be2afc63917b1d78d67ca86ad8b18cfc569bb975a0c651fa4c735935be8",
+    "timeStamp": 1646234808483,
     "transactions": [
       {
         "sender": {
@@ -260,80 +518,101 @@
           "algorithm": "ECDSA",
           "withCompression": false
         },
-        "value": 1.0,
+        "value": 0.02755,
         "outputs": [
           {
-            "id": "730fc8681eb19e23e17c8e192effd110b89db610476dd248930273391f8dc6cc",
+            "id": "8e00973ea83838f5c650713687e31ec3360848a5d1180249b46e31895410c1a5",
             "recipient": {
               "algorithm": "ECDSA",
               "withCompression": false
             },
-            "value": 1.0
+            "value": 0.02755
+          },
+          {
+            "id": "2afbbc72389b9636da9816b3b21b3528a3e1f4128e38829aa31ca20965726c9c",
+            "recipient": {
+              "algorithm": "ECDSA",
+              "withCompression": false
+            },
+            "value": 0.0024499999999999973
           }
         ],
-        "id": "0",
+        "inputs": [
+          {
+            "id": "e39d6e1f8d006190a2e208281617fec2e9fc84cde9672ac272e6dd8790ad332a",
+            "utx0": {
+              "id": "e39d6e1f8d006190a2e208281617fec2e9fc84cde9672ac272e6dd8790ad332a",
+              "recipient": {
+                "algorithm": "ECDSA",
+                "withCompression": false
+              },
+              "value": 0.03
+            }
+          }
+        ],
+        "id": "5f2575b0e269b6d98d9584042f5b6aaf850ec2b80f4f276843d12cff8808bb70",
         "signature": [
           48,
           53,
           2,
           24,
-          83,
-          48,
-          115,
-          -102,
-          -29,
-          -53,
-          0,
-          19,
-          47,
-          -103,
-          -62,
-          -65,
-          -38,
-          -14,
-          -78,
-          -62,
-          13,
-          -7,
-          -6,
-          82,
-          125,
-          -125,
-          -77,
-          -119,
+          77,
+          -42,
+          34,
+          111,
+          81,
+          -83,
+          -24,
+          113,
+          59,
+          -108,
+          -76,
+          -40,
+          -5,
+          96,
+          -91,
+          -39,
+          41,
+          -101,
+          116,
+          -93,
+          103,
+          21,
+          117,
+          -79,
           2,
           25,
           0,
-          -93,
-          92,
-          -123,
+          -18,
+          20,
+          -7,
+          -119,
+          -121,
+          16,
+          19,
           119,
-          -48,
+          30,
+          18,
           -82,
-          51,
-          -109,
-          97,
-          123,
-          -24,
-          96,
-          34,
-          116,
-          -49,
-          126,
-          -6,
-          31,
-          -115,
-          10,
-          -65,
-          37,
-          -70,
-          86
+          -124,
+          -37,
+          -124,
+          21,
+          -31,
+          67,
+          -27,
+          8,
+          -30,
+          56,
+          -39,
+          -42,
+          38
         ]
       }
     ],
-    "merkleRoot": "0",
-    "hash": "000609ab27c35f0c9f908bfe100fe6740eeec96fa66c4da1913b8330090dd2ca",
-    "nonce": 1150,
+    "merkleRoot": "5f2575b0e269b6d98d9584042f5b6aaf850ec2b80f4f276843d12cff8808bb70",
+    "hash": "0003fa2746418dff230be5495547e71218d90c2c21b67dfdcf999bbd237f6039",
+    "nonce": 201,
     "miner": {
       "algorithm": "ECDSA",
       "withCompression": false

