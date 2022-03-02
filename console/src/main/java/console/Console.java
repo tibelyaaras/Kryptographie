@@ -18,12 +18,12 @@ public class Console {
     private final ConsolePrintUtility printUtility;
     private final Report report;
     // Bitcoin Transactions
-    private final Network network;
     private boolean isRunning;
     private String input;
 
 
     public Console() {
+
         this.printUtility = new ConsolePrintUtility();
         this.report = new Report();
 
@@ -31,12 +31,10 @@ public class Console {
         this.bankAccount = Bank.generateBankAccount("Clue Less", 5000);
         this.wallet = new Wallet();
 
-        // Bitcoin Transactions
-        this.network = Network.getInstance();
+
 
         // Console Application
         printUtility.printInitApplication();
-
         while (!isRunning) {
             this.input = handleInput();
 
@@ -120,7 +118,7 @@ public class Console {
 
         if (currentBalance >= exchangeInEuro) {
             this.bankAccount.setBalance(currentBalance - exchangeInEuro);
-            this.network.buyBitcoin(this.wallet, amount);
+            Network.getInstance().buyBitcoin(this.wallet, amount);
         }
     }
 

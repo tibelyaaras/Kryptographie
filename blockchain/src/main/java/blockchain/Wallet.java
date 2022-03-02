@@ -39,13 +39,13 @@ public class Wallet {
         double total = 0;
 
         for (Map.Entry<String, TransactionOutput> item : Network.getInstance().getUtx0Map().entrySet()) {
+            System.out.println("Test9");
             TransactionOutput utx0 = item.getValue();
             if (utx0.isMine(publicKey)) {
                 utx0Map.put(utx0.getID(), utx0);
                 total += utx0.getValue();
             }
         }
-
         return total;
     }
 

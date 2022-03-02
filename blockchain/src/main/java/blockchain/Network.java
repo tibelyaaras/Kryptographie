@@ -172,11 +172,11 @@ public class Network {
     }
 
     public int getTransactionSequence(){
-        return transactionSequence;
+        return this.transactionSequence;
     }
 
     public void incrementTransactionSequence(){
-        transactionSequence++;
+        this.transactionSequence++;
     }
 
 }
