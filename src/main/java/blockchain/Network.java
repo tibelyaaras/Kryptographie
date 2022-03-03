@@ -34,7 +34,7 @@ public class Network {
         this.miners.add(new Miner("Eve"));
         this.miners.add(new Miner("Sam"));
 
-        this.satoshiNakamoto = new User("Satoshi Nakamoto",new Wallet());
+        this.satoshiNakamoto = new User("Satoshi Nakamoto", new Wallet());
 
         this.genesisTransaction = new Transaction(satoshiNakamoto.getWallet().getPublicKey(), satoshiNakamoto.getWallet().getPublicKey(), 1, null);
         this.genesisTransaction.generateSignature(satoshiNakamoto.getWallet().getPrivateKey());

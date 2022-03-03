@@ -14,7 +14,7 @@ public class User {
         this.wallet = wallet;
     }
 
-    public User (String name,Wallet wallet){
+    public User(String name, Wallet wallet) {
         this.name = name;
         this.bankAccount = null;
         this.wallet = wallet;
