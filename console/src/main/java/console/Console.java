@@ -5,7 +5,7 @@ import bank.BankAccount;
 import blockchain.Network;
 import blockchain.StringUtility;
 import blockchain.Wallet;
-import report.Report;
+import Report;
 
 import java.security.PublicKey;
 import java.util.Scanner;

