@@ -4,13 +4,19 @@ import bank.BankAccount;
 import blockchain.Wallet;
 
 public class User {
-    private final String name;
-    private final BankAccount bankAccount;
-    private final Wallet wallet;
+    protected final String name;
+    protected final BankAccount bankAccount;
+    protected final Wallet wallet;
 
     public User(String name, BankAccount bankAccount, Wallet wallet) {
         this.name = name;
         this.bankAccount = bankAccount;
+        this.wallet = wallet;
+    }
+
+    public User (String name,Wallet wallet){
+        this.name = name;
+        this.bankAccount = null;
         this.wallet = wallet;
     }
 

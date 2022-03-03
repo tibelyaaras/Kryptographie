@@ -1,6 +1,7 @@
 package blockchain;
 
 import com.google.gson.GsonBuilder;
+import user.User;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -21,7 +22,7 @@ public class Network {
     transient final ArrayList<Block> blockchain = new ArrayList<>();
     transient final List<Miner> miners = new ArrayList<>();
     transient final Transaction genesisTransaction;
-    transient final Wallet satoshiNakamoto;
+    transient final User satoshiNakamoto;
     transient Block previousBlock;
 
     public Network() {
@@ -33,10 +34,10 @@ public class Network {
         this.miners.add(new Miner("Eve"));
         this.miners.add(new Miner("Sam"));
 
-        this.satoshiNakamoto = new Wallet();
+        this.satoshiNakamoto = new User("Satoshi Nakamoto",new Wallet());
 
-        this.genesisTransaction = new Transaction(satoshiNakamoto.getPublicKey(), satoshiNakamoto.getPublicKey(), 1, null);
-        this.genesisTransaction.generateSignature(satoshiNakamoto.getPrivateKey());
+        this.genesisTransaction = new Transaction(satoshiNakamoto.getWallet().getPublicKey(), satoshiNakamoto.getWallet().getPublicKey(), 1, null);
+        this.genesisTransaction.generateSignature(satoshiNakamoto.getWallet().getPrivateKey());
         this.genesisTransaction.setId("0");
         this.genesisTransaction.getOutputs().add(
                 new TransactionOutput(
@@ -138,7 +139,7 @@ public class Network {
     }
 
     public void buyBitcoin(Wallet reciverWallet, double amount) {
-        Transaction bitcoinSend = this.satoshiNakamoto.sendFunds(reciverWallet.getPublicKey(), amount);
+        Transaction bitcoinSend = this.satoshiNakamoto.getWallet().sendFunds(reciverWallet.getPublicKey(), amount);
         addTransaction(bitcoinSend);
     }
 
