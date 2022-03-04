@@ -12,4 +12,7 @@ public enum ConsoleConfiguration {
 
     public final String nameOfSubFolder = "report" + fileSeparator + "jar";
     public final String subFolderPathOfJavaArchive = nameOfSubFolder + fileSeparator + nameOfJavaArchive;
+
+    // Path of directory
+    public final String directory = "";
 }

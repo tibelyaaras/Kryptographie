@@ -20,30 +20,35 @@ public class Console {
 
     // Victim
     private final User userClueLess;
+
     // Attacker
     private final User userEd;
     private final double initialBalance;
+
     // Console Application
     private final ConsolePrintUtility printUtility;
-    // Data and Psychological Pressure
-    private final String directory = "C:/Users/ara112588/Desktop/data";
     private boolean isRunning;
     private String input;
+
+    // Data and Psychological Pressure
+    private final String directory = ConsoleConfiguration.instance.directory;
+    private boolean isEncrypted;
+    private double amount;
+    private int minute;
+    private Timer timer;
+
     // Reflection
     private Class clazz;
     private Object instance;
     private Object port;
-    private boolean isEncrypted;
-    private double amount;
-    private int minute;
 
     public Console() {
         loadClazzFromJavaArchive();
 
         this.printUtility = new ConsolePrintUtility();
 
-        if(this.directory.equals("")) {
-            System.out.println("+++ Please change the path of the dedicated directory before running this application. +++");
+        if (this.directory.equals("")) {
+            System.out.println("\n\n\n+++ Please change the path of the dedicated directory before running this application. +++\n\n");
             System.exit(0);
         }
 
@@ -51,7 +56,7 @@ public class Console {
         this.userClueLess = new User("Clue Less", Bank.generateBankAccount("Clue Less", 5000), new Wallet());
 
         // Attacker
-        this.userEd = new User("Ed", Bank.generateBankAccount("Ed", 0), new Wallet());
+        this.userEd = new User("Ed", new Wallet());
         this.initialBalance = userEd.getWallet().getBalance();
 
         // Psychological Pressure
@@ -64,7 +69,7 @@ public class Console {
         while (!isRunning) {
             this.input = handleInput();
 
-            if (input.equals("help")) {
+            if (input.equalsIgnoreCase("help")) {
                 this.isRunning = true;
                 printUtility.printHelpMenu();
                 try {
@@ -158,6 +163,8 @@ public class Console {
         if (currentBalance >= exchangeInEuro) {
             userClueLess.getBankAccount().setBalance(currentBalance - exchangeInEuro);
             Network.getInstance().buyBitcoin(userClueLess.getWallet(), amount);
+        } else {
+            System.out.format("Your bank account balance doesn't match the necessary amount to exchange %.5f BTC.\n", amount);
         }
     }
 
@@ -166,12 +173,13 @@ public class Console {
     }
 
     private void checkPayment() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        System.out.println(userEd.getWallet().getBalance());
         if (isEncrypted) {
             if ((userEd.getWallet().getBalance() >= (this.initialBalance + amount)) && Network.getInstance().isChainValid()) {
                 System.out.println("Transaction successful! Your files will be decrypted.");
                 Method encryptMethod = port.getClass().getDeclaredMethod("startDecryption");
                 encryptMethod.invoke(port);
+                timer.cancel();
+                exitProgramm();
             } else {
                 System.out.println("You need to pay me the full amount!");
                 System.out.format("To decrypt your files, I need %.5f more BTC!\n", (amount - (userEd.getWallet().getBalance()) - initialBalance));
@@ -200,7 +208,7 @@ public class Console {
 
     // Handle timer
     private void startTimer() {
-        Timer timer = new Timer();
+        this.timer = new Timer();
 
         timer.schedule(new TimerTask() {
             public void run() {

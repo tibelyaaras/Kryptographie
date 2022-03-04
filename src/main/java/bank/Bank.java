@@ -10,7 +10,6 @@ public class Bank {
     }
 
 
-
     static String generateIBAN() {
         Random rand = new Random();
         StringBuilder card = new StringBuilder("DE");

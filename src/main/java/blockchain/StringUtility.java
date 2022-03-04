@@ -73,7 +73,7 @@ public class StringUtility {
         try {
             byte[] byteKey = Base64.getDecoder().decode(string.getBytes());
             X509EncodedKeySpec X509publicKey = new X509EncodedKeySpec(byteKey);
-            KeyFactory kf = KeyFactory.getInstance("ECDSA", "BC");
+            KeyFactory kf = KeyFactory.getInstance("EC");
 
             return kf.generatePublic(X509publicKey);
         } catch (Exception e) {

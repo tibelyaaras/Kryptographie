@@ -1,8 +1,8 @@
 package bank;
 
-public class BankAccount extends Bank{
-    private String owner;
-    private String iban;
+public class BankAccount extends Bank {
+    private final String owner;
+    private final String iban;
     private double balance;
 
     public BankAccount(String owner, String iban, double balance) {
@@ -10,7 +10,6 @@ public class BankAccount extends Bank{
         this.iban = iban;
         this.balance = balance;
     }
-
 
 
     public String getOwner() {
